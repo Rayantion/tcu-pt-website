@@ -73,9 +73,17 @@ export default function Faculty() {
               transition={{ duration: 0.3 }}
               className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow"
             >
-              <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center">
-                <span className="text-2xl">👤</span>
-              </div>
+              {f.photo ? (
+                <img
+                  src={f.photo}
+                  alt={f.name}
+                  className="w-20 h-20 mx-auto mb-4 rounded-full object-cover border-2 border-primary/20 dark:border-primary-light/20"
+                />
+              ) : (
+                <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center">
+                  <span className="text-2xl">👤</span>
+                </div>
+              )}
               <h3 className="text-lg font-semibold text-neutral-800 dark:text-neutral-200 text-center">{f.name}</h3>
               <p className="text-sm text-primary dark:text-primary-light text-center mb-1">{t(f.title, f.title_en)}</p>
               <p className="text-xs text-neutral-500 dark:text-neutral-400 text-center mb-3">{f.degree}</p>

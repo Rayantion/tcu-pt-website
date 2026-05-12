@@ -27,3 +27,5 @@ dist-ssr
 .omc/
 extract_*.py
 DESIGN.md.b64
+
+.vercel
