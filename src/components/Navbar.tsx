@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import { useLanguage } from '../contexts/LanguageContext'
 import { useTheme } from '../contexts/ThemeContext'
 
@@ -16,12 +16,38 @@ const navLinks = [
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const { lang, setLang, t } = useLanguage()
   const { dark, toggle } = useTheme()
   const location = useLocation()
 
+  const { scrollY } = useScroll()
+  const navBg = useTransform(
+    scrollY,
+    [0, 50],
+    ['rgba(255,255,255,0.6)', 'rgba(255,255,255,0.85)']
+  )
+  const navBgDark = useTransform(
+    scrollY,
+    [0, 50],
+    ['rgba(23,23,23,0.6)', 'rgba(23,23,23,0.85)']
+  )
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 glass dark:glass-dark border-b border-neutral-200/50 dark:border-neutral-700/50 transition-colors duration-300">
+    <motion.nav
+      style={{ backgroundColor: dark ? navBgDark : navBg }}
+      className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b transition-all duration-300 ${
+        scrolled
+          ? 'border-neutral-300/60 dark:border-neutral-600/60 shadow-lg'
+          : 'border-neutral-200/30 dark:border-neutral-700/30'
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center gap-2 shrink-0">
@@ -117,6 +143,6 @@ export default function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
-    </nav>
+    </motion.nav>
   )
 }

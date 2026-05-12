@@ -2,6 +2,12 @@ import { motion } from 'framer-motion'
 import { useLanguage } from '../contexts/LanguageContext'
 import { programs } from '../data'
 
+const cardHover = {
+  scale: 1.02,
+  y: -4,
+  transition: { type: 'spring' as const, stiffness: 300, damping: 20 },
+}
+
 export default function Programs() {
   const { t } = useLanguage()
   const p = programs
@@ -11,6 +17,7 @@ export default function Programs() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
         className="text-center mb-12"
       >
         <h1 className="text-3xl sm:text-4xl font-bold text-neutral-800 dark:text-neutral-200 mb-4">
@@ -27,8 +34,9 @@ export default function Programs() {
           initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="bg-white dark:bg-neutral-800 rounded-2xl p-8 shadow-lg"
+          transition={{ duration: 0.6 }}
+          whileHover={cardHover}
+          className="bg-white dark:bg-neutral-800 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
         >
           <div className="flex items-center gap-3 mb-6">
             <div className="w-12 h-12 rounded-xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center">
@@ -65,8 +73,9 @@ export default function Programs() {
           initial={{ opacity: 0, x: 30 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="bg-white dark:bg-neutral-800 rounded-2xl p-8 shadow-lg"
+          transition={{ duration: 0.6 }}
+          whileHover={cardHover}
+          className="bg-white dark:bg-neutral-800 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
         >
           <div className="flex items-center gap-3 mb-6">
             <div className="w-12 h-12 rounded-xl bg-accent/10 dark:bg-accent/20 flex items-center justify-center">

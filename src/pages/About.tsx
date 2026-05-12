@@ -2,6 +2,12 @@ import { motion } from 'framer-motion'
 import { useLanguage } from '../contexts/LanguageContext'
 import { mission, history } from '../data'
 
+const cardHover = {
+  scale: 1.02,
+  y: -4,
+  transition: { type: 'spring' as const, stiffness: 300, damping: 20 },
+}
+
 export default function About() {
   const { t } = useLanguage()
 
@@ -38,19 +44,19 @@ export default function About() {
                 className={`relative flex items-start gap-4 ${i % 2 === 0 ? 'sm:flex-row' : 'sm:flex-row-reverse'}`}
               >
                 <div className={`hidden sm:block w-1/2 ${i % 2 === 0 ? 'text-right pr-8' : 'text-left pl-8'}`}>
-                  <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-lg inline-block">
+                  <motion.div whileHover={cardHover} className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow cursor-pointer inline-block">
                     <span className="text-primary dark:text-primary-light font-bold text-lg">{item.year}</span>
                     <h3 className="font-semibold text-neutral-800 dark:text-neutral-200 mt-1">{t(item.title, item.title_en)}</h3>
                     <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">{item.description}</p>
-                  </div>
+                  </motion.div>
                 </div>
                 <div className="absolute left-4 sm:left-1/2 w-3 h-3 bg-primary dark:bg-primary-light rounded-full -translate-x-1.5 mt-2" />
                 <div className="sm:hidden ml-8 flex-1">
-                  <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-lg">
+                  <motion.div whileHover={cardHover} className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow cursor-pointer">
                     <span className="text-primary dark:text-primary-light font-bold text-lg">{item.year}</span>
                     <h3 className="font-semibold text-neutral-800 dark:text-neutral-200 mt-1">{t(item.title, item.title_en)}</h3>
                     <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">{item.description}</p>
-                  </div>
+                  </motion.div>
                 </div>
                 <div className="hidden sm:block w-1/2" />
               </motion.div>

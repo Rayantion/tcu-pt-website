@@ -3,6 +3,22 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useLanguage } from '../contexts/LanguageContext'
 import { faculty } from '../data'
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.08 } },
+}
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 30, scale: 0.95 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { delay: i * 0.05, duration: 0.4, ease: 'easeOut' as const },
+  }),
+  exit: { opacity: 0, scale: 0.9, transition: { duration: 0.2 } },
+}
+
 type Role = 'all' | 'professor' | 'associate' | 'assistant'
 
 export default function Faculty() {
@@ -61,17 +77,26 @@ export default function Faculty() {
         </div>
       </motion.div>
 
-      <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <motion.div
+        layout
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: '-50px' }}
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+      >
         <AnimatePresence>
-          {filtered.map((f) => (
+          {filtered.map((f, i) => (
             <motion.div
               key={f.id}
               layout
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.3 }}
-              className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow"
+              variants={cardVariants}
+              custom={i}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              whileHover={{ scale: 1.02, y: -4, transition: { type: 'spring' as const, stiffness: 300, damping: 20 } }}
+              className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
             >
               {f.photo ? (
                 <img

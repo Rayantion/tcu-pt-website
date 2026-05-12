@@ -3,9 +3,25 @@ import { motion } from 'framer-motion'
 import { useLanguage } from '../contexts/LanguageContext'
 import { news } from '../data'
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.06 } },
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' as const } },
+}
+
+const cardHover = {
+  scale: 1.01,
+  y: -3,
+  transition: { type: 'spring' as const, stiffness: 300, damping: 20 },
+}
+
 export default function News() {
   const { t } = useLanguage()
-  const [visible, setVisible] = useState(3)
+  const [visible, setVisible] = useState(6)
   const hasMore = visible < news.length
 
   return (
@@ -13,6 +29,7 @@ export default function News() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
         className="text-center mb-12"
       >
         <h1 className="text-3xl sm:text-4xl font-bold text-neutral-800 dark:text-neutral-200 mb-4">
@@ -23,14 +40,19 @@ export default function News() {
         </p>
       </motion.div>
 
-      <div className="space-y-4 max-w-3xl mx-auto">
-        {news.slice(0, visible).map((item, i) => (
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: '-50px' }}
+        className="space-y-4 max-w-3xl mx-auto"
+      >
+        {news.slice(0, visible).map((item) => (
           <motion.div
             key={item.id}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.05 }}
-            className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow"
+            variants={itemVariants}
+            whileHover={cardHover}
+            className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
           >
             <div className="flex items-start gap-4">
               <div className="shrink-0 text-center">
@@ -63,7 +85,7 @@ export default function News() {
             </div>
           </motion.div>
         ))}
-      </div>
+      </motion.div>
 
       {hasMore && (
         <div className="text-center mt-8">

@@ -3,6 +3,12 @@ import { motion } from 'framer-motion'
 import { useLanguage } from '../contexts/LanguageContext'
 import { contact } from '../data'
 
+const cardHover = {
+  scale: 1.01,
+  y: -3,
+  transition: { type: 'spring' as const, stiffness: 300, damping: 20 },
+}
+
 export default function Contact() {
   const { t } = useLanguage()
   const [form, setForm] = useState({ name: '', email: '', message: '' })
@@ -20,6 +26,7 @@ export default function Contact() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
         className="text-center mb-12"
       >
         <h1 className="text-3xl sm:text-4xl font-bold text-neutral-800 dark:text-neutral-200 mb-4">
@@ -36,9 +43,10 @@ export default function Contact() {
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
           className="space-y-4"
         >
-          <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-lg">
+          <motion.div whileHover={cardHover} className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow cursor-pointer">
             <div className="flex items-center gap-3 mb-2">
               <div className="w-10 h-10 rounded-lg bg-primary/10 dark:bg-primary/20 flex items-center justify-center">
                 <svg className="w-5 h-5 text-primary dark:text-primary-light" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -51,9 +59,9 @@ export default function Contact() {
                 <p className="text-sm text-neutral-600 dark:text-neutral-400">{t(contact.address_zh, contact.address_en)}</p>
               </div>
             </div>
-          </div>
+          </motion.div>
 
-          <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-lg">
+          <motion.div whileHover={cardHover} className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow cursor-pointer">
             <div className="flex items-center gap-3 mb-2">
               <div className="w-10 h-10 rounded-lg bg-primary/10 dark:bg-primary/20 flex items-center justify-center">
                 <svg className="w-5 h-5 text-primary dark:text-primary-light" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -65,9 +73,9 @@ export default function Contact() {
                 <p className="text-sm text-neutral-600 dark:text-neutral-400">{contact.phone}</p>
               </div>
             </div>
-          </div>
+          </motion.div>
 
-          <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-lg">
+          <motion.div whileHover={cardHover} className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow cursor-pointer">
             <div className="flex items-center gap-3 mb-2">
               <div className="w-10 h-10 rounded-lg bg-primary/10 dark:bg-primary/20 flex items-center justify-center">
                 <svg className="w-5 h-5 text-primary dark:text-primary-light" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -81,11 +89,11 @@ export default function Contact() {
                 </a>
               </div>
             </div>
-          </div>
+          </motion.div>
 
-          <div className="bg-neutral-200 dark:bg-neutral-700 rounded-2xl h-48 flex items-center justify-center">
+          <motion.div whileHover={cardHover} className="bg-neutral-200 dark:bg-neutral-700 rounded-2xl h-48 flex items-center justify-center cursor-pointer">
             <p className="text-neutral-500 dark:text-neutral-400">{t('地圖位置', 'Map Location')}</p>
-          </div>
+          </motion.div>
         </motion.div>
 
         {/* Contact Form */}

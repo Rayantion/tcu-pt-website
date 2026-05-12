@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useLanguage } from '../contexts/LanguageContext'
-import { department, stats, news } from '../data'
+import { stats, news } from '../data'
 import StatCard from '../components/StatCard'
+import HeroCarousel from '../components/HeroCarousel'
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -14,41 +15,19 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' as const } },
 }
 
+const cardHover = {
+  scale: 1.02,
+  y: -4,
+  transition: { type: 'spring' as const, stiffness: 300, damping: 20 },
+}
+
 export default function Home() {
   const { t } = useLanguage()
 
   return (
     <div className="space-y-16 pb-16">
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-primary dark:bg-primary-dark">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-white rounded-full blur-3xl" />
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-primary-light rounded-full blur-3xl" />
-        </div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-            className="text-center"
-          >
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
-              {department.name_zh}
-            </h1>
-            <p className="text-xl sm:text-2xl text-primary-light mb-4">
-              {department.name_en}
-            </p>
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3">
-              <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
-              <span className="text-lg text-white font-medium">
-                {t(department.motto, department.motto_en)}
-              </span>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      {/* Hero Carousel */}
+      <HeroCarousel />
 
       {/* Stats */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -74,10 +53,10 @@ export default function Home() {
       {/* CTAs */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-80px' }}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
         >
           {[
@@ -86,23 +65,34 @@ export default function Home() {
             { zh: '師資陣容', en: 'Faculty', path: '/faculty', desc: '專任教師介紹', desc_en: 'Meet our faculty' },
             { zh: '聯絡我們', en: 'Contact', path: '/contact', desc: '與我們取得聯繫', desc_en: 'Get in touch' },
           ].map((item) => (
-            <Link
+            <motion.div
               key={item.path}
-              to={item.path}
-              className="group bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all hover:-translate-y-1"
+              variants={itemVariants}
+              whileHover={cardHover}
             >
-              <h3 className="text-lg font-semibold text-neutral-800 dark:text-neutral-200 mb-1 group-hover:text-primary dark:group-hover:text-primary-light transition-colors">
-                {t(item.zh, item.en)}
-              </h3>
-              <p className="text-sm text-neutral-500 dark:text-neutral-400">{t(item.desc, item.desc_en)}</p>
-            </Link>
+              <Link
+                to={item.path}
+                className="group block bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow"
+              >
+                <h3 className="text-lg font-semibold text-neutral-800 dark:text-neutral-200 mb-1 group-hover:text-primary dark:group-hover:text-primary-light transition-colors">
+                  {t(item.zh, item.en)}
+                </h3>
+                <p className="text-sm text-neutral-500 dark:text-neutral-400">{t(item.desc, item.desc_en)}</p>
+              </Link>
+            </motion.div>
           ))}
         </motion.div>
       </section>
 
       {/* News */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between mb-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="flex items-center justify-between mb-6"
+        >
           <h2 className="text-2xl font-bold text-neutral-800 dark:text-neutral-200">
             {t('最新消息', 'Latest News')}
           </h2>
@@ -112,7 +102,7 @@ export default function Home() {
           >
             {t('查看全部', 'View All')} →
           </Link>
-        </div>
+        </motion.div>
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -124,7 +114,8 @@ export default function Home() {
             <motion.div
               key={item.id}
               variants={itemVariants}
-              className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all"
+              whileHover={cardHover}
+              className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
             >
               <span className="text-xs text-neutral-500 dark:text-neutral-400">{item.date}</span>
               <h3 className="text-lg font-semibold text-neutral-800 dark:text-neutral-200 mt-2 mb-2">
